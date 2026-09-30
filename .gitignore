@@ -1,0 +1,36 @@
+# =========================
+# R
+# =========================
+
+# Workspace / historial
+.Rhistory
+.RData
+.RDataTmp
+.Ruserdata
+
+# Configuración local de RStudio / Positron
+.Rproj.user/
+*.Rproj
+
+# Paquetes / compilación
+*.tar.gz
+*.zip
+*.Rcheck/
+
+# =========================
+# Quarto
+# =========================
+
+# Archivos temporales de Quarto
+*_cache/
+*_files/
+
+# =========================
+# Python
+# =========================
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
