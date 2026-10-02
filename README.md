@@ -1,2 +1,2 @@
 # Simulacion
-Material para la asignatura Simulación 2026A
+Material para las asignaturas de Implementación (python) y Simulación (R) 2026A en la EPN.
