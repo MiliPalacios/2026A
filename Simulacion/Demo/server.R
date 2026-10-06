@@ -22,7 +22,18 @@ function(input, output, session) {
         hist(x, breaks = bins, col = input$color, border = 'white',
              xlab = 'Tiempo de espera (min)',
              main = 'Histogramas de tiempos de espera')
-
     })
 
+    output$dispersion <- renderPlot({
+        plot(faithful[,1], pch = input$tipo, xlab = "Tiempo", ylab = "Valor", main = "Gradico de dispersión")
+    })
+
+    output$resumen <- renderTable(
+        summary(faithful)
+    )
+
+    output$datos <- renderDataTable(
+        faithful,
+        options = list(pageLenght = 8)
+    )
 }
