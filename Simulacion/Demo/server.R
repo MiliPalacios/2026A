@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(kableExtra)
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
@@ -28,9 +29,17 @@ function(input, output, session) {
         plot(faithful[,1], pch = input$tipo, xlab = "Tiempo", ylab = "Valor", main = "Gradico de dispersión")
     })
 
-    output$resumen <- renderTable(
-        summary(faithful)
-    )
+    #output$resumen <- renderTable(
+    #    summary(faithful)
+    #)
+
+    output$resumen <- function(){
+        res <- summary(faithful)
+      # Personalizacion
+        kbl(res) |> 
+            kable_styling(full_width = TRUE, bootstrap_options = c("condensed"), font_size = 15) |> 
+            row_spec(0, color = "white", background = "#F54927", font_size = 14)
+    }
 
     output$datos <- renderDataTable(
         faithful,

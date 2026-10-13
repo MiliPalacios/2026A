@@ -12,10 +12,28 @@ library(shiny)
 # Define UI for application that draws a histogram
 fluidPage(
 
+    #Title
+    fluidRow(
+        column(width = 2, tags$img(src = "poliperro.jpg", width = "210px", height = "90px"), class = "text-left"), 
+        column(width = 8, h1("Aplicativo Simulación", style = "text-align:center; color: #132b60; padding:25px; font-size:2.7em; font-family:roman")),
+        column(width = 2, tags$img(src = "poliperro.jpg", width = "210px", height = "90px"), class = "text-right")
+    ),
+
+    # Personalizacion de titulos para todo el archivo
+    tags$style("h1 {color:#132b60; font-family:roman}"),
+    tags$style("h2 {color:#2a406f; font-family:roman}"),
+    tags$style("h3 {color:#42557f; font-family:roman}"),
+    tags$style("h4 {color:#596a8f; font-family:roman}"),
+    tags$style("h5 {color:#717f9f; font-family:roman}"),
+
     # Application title
-    titlePanel("Primer Aplicativo Shiny"),
+    #titlePanel("Primer Aplicativo Shiny"),
+
+
     # Titulo de segundo orden
     h2("Histograma"),
+    h3("Pendiente por definir"),
+    h4("Aun no definido"),
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
