@@ -1,4 +1,4 @@
-#Generación de numeros pseudoaleatorios 
+# Generación de numeros pseudoaleatorios por multiplicativos
 mcm <- function(a, m, x0, n){
   if(is.integer(a) & is.integer(m) & a > 0 & m> 0){
     res <- numeric(n+1)
@@ -26,7 +26,7 @@ print(valores)
 which.max(valores$ciclo)
 which.min(valores$ciclo)
 
-
+# Otro esquema multiplicativo aditivo
 gcm <- function(a, m, c, x0, n){
   if(is.integer(a) & is.integer(m) & a > 0 & m> 0){
     res <- numeric(n+1)
@@ -44,8 +44,9 @@ res2<-gcm(a = 31L, m = 67L,c=1, x0= 12, n = 10)
 which(res1[1]==res2)
 which(res1[2]==res2)
 
-fx <- 'exp(-x^2)'
+# Aproximacion de integrales
 
+fx <- 'exp(-x^2)'
 # Aproximacion de integrales
 #f(x) es ingresada por el usuario (x es la variable)
 aprox_fx <- function(k){
@@ -80,7 +81,7 @@ aprox_f2x <- function(k) {
 
 aprox_f2x(100000)
 
-mi_entorno <- list(x=seq(a,b,by=0.1))
+mi_entruniforno <- list(x=seq(a,b,by=0.1))
 mi_entorno$y <- eval(parse(text = f2x),envir = mi_entorno)
 mi_entorno
 
@@ -92,7 +93,7 @@ plot(mi_entorno$x, mi_entorno$y, type = 'l', col ='red' , xlab = 'x', ylab = 'y'
 f3x <- 'exp(-x^2)'
 
 aprox_f3x <- function(k) {
-  y <- runif(k)
+  y <- (k)
   x <- (1 / y) - 1
   
   return(mean(eval(parse(text = f3x)) / (y^2)))
