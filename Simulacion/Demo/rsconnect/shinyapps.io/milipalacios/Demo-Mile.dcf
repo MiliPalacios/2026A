@@ -1,0 +1,12 @@
+name: Demo-Mile
+title: Demo-Mile
+username: milipalacios
+account: milipalacios
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 18226735
+bundleId: 12715628
+url: https://milipalacios.shinyapps.io/Demo-Mile/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
