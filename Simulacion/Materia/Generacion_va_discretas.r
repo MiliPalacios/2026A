@@ -48,3 +48,57 @@ val_teoricos <- rgeom(n = 1000000, prob = 1-0.37) + 1 # Empieza desde 0 exitos (
 
 # Test de Kolmogorov - Smirnov: prueba de bondad de ajuste (nuestro dg se parece a dgeom??)
 ks.test(res, val_teoricos)
+
+# Distribusion Poisson
+# Input: lambda
+
+dp <- function(lambda){
+  U <- runif(1)
+  i <-0
+  p <- exp(-lambda)
+  Fx <- p
+while(U>= Fx)
+  {
+    p <- lambda*p/(i+1)
+    Fx <- Fx + p
+    i <- i + 1
+  }
+  return(i)
+}
+
+dp(lambda = 4)
+
+# Validacion
+res <- sapply(1:n,function(k){
+dp(lambda = 4)
+})
+mean(res)   # cercano a lambda
+var(res)    # cercano a lambda
+hist(res)
+
+# Distribucion Binomial
+# inputs: n, p
+
+db <- function(n,p){
+  U <- runif(1)
+  c <- p/(1-p)
+  i <- 0
+  pr <- (1-p)^n
+  Fx <- pr
+  while(U>= Fx)
+  {
+    pr <- c*(n-i)*(i+1)*pr
+    Fx <- Fx + pr
+    i <- i + 1
+  }
+  return(i)
+}
+
+db(10,0.04)
+
+# Validacion
+res <- sapply(1:n,function(k){
+db(10,0.04)
+})
+mean(res)    # np = 0.4
+var(res)     # npq 
