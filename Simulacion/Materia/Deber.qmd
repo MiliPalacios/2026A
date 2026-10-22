@@ -15,19 +15,17 @@ mcm <- function(a, m, c, x0, n){
     for(i in 2:(n+1)){
       res[i] <- ((a*res[i-1] + c) %% m)
     }
-    return(res[-1]/m) # Elimina el primer elemento
+    return(res[-1]) # Elimina el primer elemento y retorna los demas
   } else {
     cat('Los valores de a, m y no cumplen las condiciones (enteros positivos)')
   }
 }
 mcm(a = 5L , m = 200L, c= 7L, x0= 3, n = 10)
-
-# Porque estan normalizados?? o no??
 ```
 
 ## Ejercicio 4
 
-$\int_0^1 (1-x^2)^{3/2}dx $
+$\int_0^1 (1-x^2)^{3/2}dx$
 
 ```{r}
 fx <- '(1-x^2)^(3/2)'
@@ -64,8 +62,6 @@ cat('\nEl valor real es: 0.5')
 $\int_{0}^{\infty} \int_{0}^{x} e^{-(x+y)}dydx$
 
 ```{r}
-
-### ESTA MAL HECHO
 fxy <- 'exp(-(x+y))'
 
 aprox_fxy <- function(k){
@@ -79,7 +75,7 @@ aprox_fxy <- function(k){
   return (mean(h_val))}
 
 cat('El valor aproximado es:', aprox_fxy(10000))
-cat('\nEl valor real de la integral es: 0.5 ')
+cat('\nEl valor real es: 0.5 ')
 ```
 
 ## Ejercicio 11
@@ -100,12 +96,10 @@ cov <- function(x,y){
   y  <- y - mean(y)
   return(mean(x*y))
 }
-cat('a. El resultado:', cov(U,Y))
+cat('a. El resultado es:', cov(U,Y))
 
 # b.
-cat('\nb. El resultado:', cov(U^2,Y))
-
-### ESTA MAL HECHO
+cat('\nb. El resultado es:', cov(U^2,Y))
 ```
 
 ## Ejercicio 13
@@ -122,5 +116,23 @@ a\. Determine $E[N]$ por simulación.
 
 b\. Determine $P[N=i]$, para $i=0,1,2,3,.., 6$ por simulación
 
-```{4{r}
+```{r}
+n <- 100   # numeros aleatorios a generar
+k <- 100000  # numero de N a generar
+res <- numeric(10)
+
+# N
+for(i in 1:k){
+  U <- runif(n)
+  aux = which(cumprod(U) >= exp(-3))
+  res[i] <- ifelse(length(aux) != 0, tail(aux, 1), 0) # Devuelve el n maximo que se solicita
+} 
+
+# a. 
+cat('E[N]:', mean(res))
+
+# b.
+cat('\n\nProbabilidades estimadas:\n')
+table(res[res <= 6]) / length(res)
+
 ```
