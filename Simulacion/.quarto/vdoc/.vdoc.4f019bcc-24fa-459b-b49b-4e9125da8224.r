@@ -1,13 +1,13 @@
----
-title: "Deber de Simulación"
-author: "Milena Palacios"
----
-
-## Ejercicio 2
-
-Si $x_0 = 3$ y $x_n = (5x_{n-1} + 7)$ mod 200 . Determine $x_1,..., x_{10}$
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 mcm <- function(a, m, c, x0, n){
   if(is.integer(a) & is.integer(m) & a > 0 & m> 0 & c>0){
     res <- numeric(n+1)
@@ -21,13 +21,13 @@ mcm <- function(a, m, c, x0, n){
   }
 }
 mcm(a = 5L , m = 200L, c= 7L, x0= 3, n = 10)
-```
-
-## Ejercicio 4
-
-$\int_0^1 (1-x^2)^{3/2}dx$
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
 fx <- '(1-x^2)^(3/2)'
 
 aprox_fx <- function(k){
@@ -37,13 +37,13 @@ aprox_fx <- function(k){
 
 cat('El valor aproximado es:', aprox_fx(10000))
 cat('\nEl valor real es: 0.5890')
-```
-
-## Ejercicio 6
-
-$\int_0^\infty x(1+x^2)^{-2}dx$
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
 fx <- 'x*(1+x^2)^(-2)'
 
 aprox_fx <- function(k){
@@ -55,13 +55,13 @@ aprox_fx <- function(k){
 
 cat('El valor aproximado es:', aprox_fx(10000))
 cat('\nEl valor real es: 0.5')
-```
-
-## Ejercicio 9
-
-$\int_{0}^{\infty} \int_{0}^{x} e^{-(x+y)}dydx$
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
 fxy <- 'exp(-(x+y))'
 
 aprox_fxy <- function(k){
@@ -76,17 +76,17 @@ aprox_fxy <- function(k){
 
 cat('El valor aproximado es:', aprox_fxy(10000))
 cat('\nEl valor real es: 0.5 ')
-```
-
-## Ejercicio 11
-
-Sea U uniforme en (0,1). Utilice simulación para aproximar lo siguiente:
-
-a\. $Cov(U, \sqrt(1-U^2)$
-
-b\. $Cov(U^2, \sqrt(1-U^2)$
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 # a.
 n <- 10000
 U <- runif(n)
@@ -100,23 +100,23 @@ cat('a. El resultado es:', cov(U,Y))
 
 # b.
 cat('\nb. El resultado es:', cov(U^2,Y))
-```
-
-## Ejercicio 13
-
-Sean $U_i, i\ge 1$ , números aleatorios. Defina N como
-
-$$
-N=\max \{n: \prod_{i=1}^n U_i \ge e^{-3}\}
-$$
-
-donde $\Pi_{i=1}^{0}, U_i = 1$
-
-a\. Determine $E[N]$ por simulación.
-
-b\. Determine $P[N=i]$, para $i=0,1,2,3,.., 6$ por simulación
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 n <- 100   # numeros aleatorios a generar
 k <- 100000  # numero de N a generar
 res <- numeric(10)
@@ -135,4 +135,6 @@ cat('E[N]:', mean(res))
 cat('\n\nProbabilidades estimadas:\n')
 table(res[res <= 6]) / length(res)
 
-```
+#
+#
+#
