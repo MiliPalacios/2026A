@@ -11,25 +11,30 @@ a\) Sea $n =100$, ejecute el programa y determine la proporción de valores que 
 
 ```{r}
 n <- 100
-res <- numeric(n)
-for(i in 1:n)
+ej1 <- function(n)
 {
-  res[i] <- sample(c(1,2), 1, replace= TRUE, prob = c(1/3, 2/3))
+  res <- numeric(n)
+  for(i in 1:n)
+  {
+    res[i] <- sample(c(1,2), 1, replace= TRUE, prob = c(1/3, 2/3))
+  }
+  return(mean(res==1))
 }
-
-mean(res==1)
+ej1(n)
 ```
 
 b\) Repita a) con $n=1000$
 
 ```{r}
-
+n <- 1000
+ej1(n)
 ```
 
-c\) Repita a) con $n=1000$
+c\) Repita a) con $n=10000$
 
 ```{r}
-
+n <- 10000
+ej1(n)
 ```
 
 ## Ejercicio 4
