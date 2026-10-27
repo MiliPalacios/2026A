@@ -58,7 +58,7 @@ lanz_esperados <- function(dados, probabilidades)
   i <- 0
   while(length(aux)!=12){
     res <- sample(dados, 2, replace = TRUE, prob = probabilidades)  # Resultado del lanzamiento
-    aux <- union(aux, sum(res)) # Se appendea el resultado
+    aux <- union(aux, sum(res)) # Se appendea la suma de los dados
     i <- i +1 # Lanzamiento realizado
   }
   return(i)  # Retorna el instante en el que han aparecido todas las posibles sumas al menos una vez
@@ -85,18 +85,55 @@ Sea X una variable aleatoria binomial con parámetros n y p. Suponga que queremo
 a\) Dé el método de la transformada inversa para generar Y.
 
 ```{r}
+# Definimos los parámetros del problema
+n <- 10
+p <- 0.4
+k <- 4
 
+# Calculamos alpha = P(X >= k)
+alpha <- 1 - pbinom(k - 1, size = n, prob = p)
+
+# Función para generar un valor de Y mediante la Transformada Inversa
+generar_Y_inversa <- function(n, p, k, alpha) {
+  U <- runif(1)
+  
+  # Buscamos el valor de Y
+  # F_X(k-1) es pbinom(k-1, n, p)
+  U_escalado <- pbinom(k - 1, size = n, prob = p) + alpha * U
+  
+  # Evaluamos desde k hasta n hasta encontrar el primer y tal que F_X(y) >= U_escalado
+  for (y in k:n) {
+    if (pbinom(y, size = n, prob = p) >= U_escalado) {
+      return(y)
+    }
+  }
+}
+
+# Ejemplo de uso: generar un valor
+generar_Y_inversa(n, p, k, alpha)
 ```
 
 b\) Dé otro método para generar Y.
 
 ```{r}
+# Función para generar Y mediante el Método de Aceptación y Rechazo
+generar_Y_rechazo <- function(n, p, k) {
+  repeat {
+    X <- rbinom(1, size = n, prob = p)
+    if (X >= k) {
+      return(X) # Aceptamos X
+    }
+    # Si no cumple, el bucle repeat vuelve a intentar
+  }
+}
+
+# Ejemplo de uso: generar un valor
+generar_Y_rechazo(n, p, k)
 ```
 
 c\) ¿Para qué valores de $\alpha$, pequeños o grandes, sería ineficiente el algoritmo en b\)?
 
-```{r}
-```
+El método de aceptación y rechazo no funcionaría para valores de $\alpha$ cercanos a 0. Pues la probabilidad de aceptar un valor simulado es muy baja,lo que obligaría a repetir el ciclo demasiadas veces y el costo computacional incrementaría significativamente.
 
 ## Ejercicio 16
 
