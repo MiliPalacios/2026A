@@ -20,21 +20,21 @@ ej1 <- function(n)
   }
   return(mean(res==1))
 }
-ej1(n)
+cat("Resultado:",ej1(n))
 ```
 
 b\) Repita a) con $n=1000$
 
 ```{r}
 n <- 1000
-ej1(n)
+cat("Resultado:",ej1(n))
 ```
 
 c\) Repita a) con $n=10000$
 
 ```{r}
 n <- 10000
-ej1(n)
+cat("Resultado:",ej1(n))
 ```
 
 ## Ejercicio 4
@@ -46,9 +46,28 @@ Inserte ejercicio
 
 ## Ejercicio 7
 
-Inserte ejercicio
+Se lanza de manera continua un par de dados legales, hasta que todos los posibles resultados 2,3,..., 12 hayan aparecido al menos una vez. Desarrolle un estudio de simulación para estimar el número esperado de lanzamientos necesarios.
 
 ```{r}
+dados <- c(1,2,3,4,5,6)
+probabilidades <- c(1/6,1/6,1/6,1/6,1/6,1/6)
+
+lanz_esperados <- function(dados, probabilidades)
+{
+  aux <- c(0) # Vector auxiliar que tendra la suma de los dados
+  i <- 0
+  while(length(aux)!=12){
+    res <- sample(dados, 2, replace = TRUE, prob = probabilidades)  # Resultado del lanzamiento
+    aux <- union(aux, sum(res)) # Se appendea el resultado
+    i <- i +1 # Lanzamiento realizado
+  }
+  return(i)  # Retorna el instante en el que han aparecido todas las posibles sumas al menos una vez
+}
+
+res <- sapply(1:1000, function(k){
+  lanz_esperados(dados, probabilidades)
+})
+cat("Numero esperado de lanzamientos:",mean(res))
 ```
 
 ## Ejercicio 10
@@ -56,6 +75,7 @@ Inserte ejercicio
 Inserte ejercicio
 
 ```{r}
+
 ```
 
 ## Ejercicio 13
