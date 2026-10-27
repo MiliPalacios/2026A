@@ -80,7 +80,20 @@ Inserte ejercicio
 
 ## Ejercicio 13
 
-Inserte ejercicio
+Sea X una variable aleatoria binomial con parámetros n y p. Suponga que queremos generar una variable aleatoria Y cuya función de masa de probabilidad es igual a la función de masa condicional de X dado que $X\ge k$ para alguna $k\le n$. Sea $\alpha = P{X\ge k}$ y suponga que se ha calculado el valor de $\alpha$.
+
+a\) Dé el método de la transformada inversa para generar Y.
+
+```{r}
+
+```
+
+b\) Dé otro método para generar Y.
+
+```{r}
+```
+
+c\) ¿Para qué valores de $\alpha$, pequeños o grandes, sería ineficiente el algoritmo en b\)?
 
 ```{r}
 ```
