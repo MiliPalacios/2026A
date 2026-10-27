@@ -1,0 +1,68 @@
+---
+title: "Deber de Simulación"
+author: "Mateo Cardenas, Milena Palacios"
+---
+
+## Ejercicio 1
+
+Escriba un progama para generar n valores a partir de la función de masa de probabilidad $p_1 = 1/3$, $p_2 = 2/3$.
+
+a\) Sea $n =100$, ejecute el programa y determine la proporción de valores que sean iguales a 1.
+
+```{r}
+n <- 100
+res <- numeric(n)
+for(i in 1:n)
+{
+  res[i] <- sample(c(1,2), 1, replace= TRUE, prob = c(1/3, 2/3))
+}
+
+mean(res==1)
+```
+
+b\) Repita a) con $n=1000$
+
+```{r}
+
+```
+
+c\) Repita a) con $n=1000$
+
+```{r}
+
+```
+
+## Ejercicio 4
+
+Inserte ejercicio
+
+```{r}
+```
+
+## Ejercicio 7
+
+Inserte ejercicio
+
+```{r}
+```
+
+## Ejercicio 10
+
+Inserte ejercicio
+
+```{r}
+```
+
+## Ejercicio 13
+
+Inserte ejercicio
+
+```{r}
+```
+
+## Ejercicio 16
+
+Inserte ejercicio
+
+```{r}
+```
