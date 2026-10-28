@@ -42,9 +42,8 @@ Yn[1] <- 0
 for(i  in 2:n){
   Yn[i] = sample(c(0,1), 1, replace = TRUE, P[Yn[i-1]+1,])
 }
-c1 <- sum(Yn)/n
-c0 <- (n - sum(Yn))/n
-
+c1 <- sum(Yn)/n  # Visitas al estado b = 1
+c0 <- (n - sum(Yn))/n # Visitas al estado a = 1
 cat("\nPi experimental:", c(c0, c1))
 # ------------------------------------------
 cat("\n\nEjercicio 12")
