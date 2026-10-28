@@ -80,60 +80,81 @@ Inserte ejercicio
 
 ## Ejercicio 13
 
-Sea X una variable aleatoria binomial con parámetros n y p. Suponga que queremos generar una variable aleatoria Y cuya función de masa de probabilidad es igual a la función de masa condicional de X dado que $X\ge k$ para alguna $k\le n$. Sea $\alpha = P{X\ge k}$ y suponga que se ha calculado el valor de $\alpha$.
+Sea X una variable aleatoria binomial con parámetros n y p. Suponga que queremos generar una variable aleatoria Y cuya función de masa de probabilidad es igual a la función de masa condicional de X dado que $X\ge k$ para alguna $k\le n$. Sea $\alpha = P(X\ge k)$ y suponga que se ha calculado el valor de $\alpha$.
 
 a\) Dé el método de la transformada inversa para generar Y.
 
+Notemos que $F_Y(y) = P(Y\le y) = P(X\le y|X\ge k) = \frac{P(X\le y,X\ge k)}{P(X\ge k)}=\frac{P(k\le X\le y)}{\alpha}=\frac{1}{\alpha}(F_X(y) - F_X(k-1))$
+
+de donde, debemos verificar que $U<F_Y(y)$ y por tanto
+
+$U<\frac{1}{\alpha}(F_X(y) - F_X(k-1))\equiv \alpha U + F_X(k-1) < F_X(y)\equiv U_1 < F_X(y)$
+
 ```{r}
-# Definimos los parámetros del problema
 n <- 10
 p <- 0.4
 k <- 4
-
-# Calculamos alpha = P(X >= k)
 alpha <- 1 - pbinom(k - 1, size = n, prob = p)
-
-# Función para generar un valor de Y mediante la Transformada Inversa
-generar_Y_inversa <- function(n, p, k, alpha) {
-  U <- runif(1)
-  
-  # Buscamos el valor de Y
-  # F_X(k-1) es pbinom(k-1, n, p)
-  U_escalado <- pbinom(k - 1, size = n, prob = p) + alpha * U
-  
-  # Evaluamos desde k hasta n hasta encontrar el primer y tal que F_X(y) >= U_escalado
-  for (y in k:n) {
-    if (pbinom(y, size = n, prob = p) >= U_escalado) {
+Y1<-function(n,p,k,alpha){
+  U1 <- alpha*runif(1) + pbinom(k-1,n,p)
+  for(y in k:n){
+    if(U1 < pbinom(y,n,p)){
       return(y)
     }
   }
 }
-
-# Ejemplo de uso: generar un valor
-generar_Y_inversa(n, p, k, alpha)
+Y1(n, p, k, alpha)
 ```
 
-b\) Dé otro método para generar Y.
+b\) Dé otro método para generar Y
+
+Usaremos el Método de Aceptación y Rechazo. Para ello notemos que
+
+$P(Y = y) = P(X= y| X\ge k) = \frac{P(X= y, X\ge k)}{P(X\ge k)} = \frac{1}{\alpha}P(X= y)$
+
+Tomaremos $q_X = P(X = x)$ como distribución de referencia, además conocemos los valores de $p_X = q_X / \alpha$ para $X\ge y$
 
 ```{r}
-# Función para generar Y mediante el Método de Aceptación y Rechazo
-generar_Y_rechazo <- function(n, p, k) {
-  repeat {
-    X <- rbinom(1, size = n, prob = p)
-    if (X >= k) {
-      return(X) # Aceptamos X
-    }
-    # Si no cumple, el bucle repeat vuelve a intentar
+# Método de Aceptación y Rechazo
+Y_vals <- k:n
+probsX <- dbinom(Y_vals, n, p)
+probsY <- probsX/alpha
+cc <<- max(probsY/probsX)   # Este valor sera 1/alpha
+
+# Simulacion de una variable binomial
+db <- function(n,p){
+  U <- runif(1)
+  ca <- p/(1-p)
+  i <- 0
+  pr <- (1-p)^n
+  Fx <- pr
+  while(U>= Fx)
+  {
+    pr <- ca*(n-i)/(i+1)*pr
+    Fx <- Fx + pr
+    i <- i + 1
   }
+  return(i)
 }
 
-# Ejemplo de uso: generar un valor
-generar_Y_rechazo(n, p, k)
+# Ejercicio
+Y2 <- function(n, p, k) {
+  repeat{
+  val_X <-db (n,p)  # Simulacion de la variable referencia
+  px <- if (val_X >= k) dbinom(val_X, size = n, prob = p) / alpha else 0 # distribucion que quiero
+  qx <- dbinom(val_X, size = n, prob = p) # distribucion referencia
+    if(runif(1) < px/(cc*qx))
+    {
+      return(val_X)
+    }
+  }
+}
+Y2(n, p, k)
 ```
 
-c\) ¿Para qué valores de $\alpha$, pequeños o grandes, sería ineficiente el algoritmo en b\)?
+c\) ¿Para qué valores de $\alpha$, pequeños o grandes, sería ineficiente el algoritmo en b)?
 
-El método de aceptación y rechazo no funcionaría para valores de $\alpha$ cercanos a 0. Pues la probabilidad de aceptar un valor simulado es muy baja,lo que obligaría a repetir el ciclo demasiadas veces y el costo computacional incrementaría significativamente.
+El método de aceptación y rechazo no funcionaría para valores de $\alpha$ cercanos a 0. Pues la probabilidad de aceptar un valor simulado es muy baja,lo que obligaría a repetir el ciclo demasiadas veces y el costo computacional incrementaría significativamente. Si $\alpha$ es muy cercana a 1 la distribución se vuelve muy extendida y se aceptarían demasiados valores, por lo que los calculos se pueden ver afectados.
 
 ## Ejercicio 16
 

@@ -87,7 +87,7 @@ db <- function(n,p){
   Fx <- pr
   while(U>= Fx)
   {
-    pr <- c*(n-i)*(i+1)*pr
+    pr <- c*(n-i)/(i+1)*pr
     Fx <- Fx + pr
     i <- i + 1
   }
