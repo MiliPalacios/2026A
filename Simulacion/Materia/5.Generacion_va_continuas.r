@@ -4,24 +4,25 @@
 # Sabemos que F(x) = (x-1)/(b-a), entonces F(x) = U implica que X = a + (b-a)U    (escala y traslada)
 
 # Método de rechazo
+# F DISTR. QUE SE QUIERE GENERARR
 fx <- function(x){
   return(20*x*(1-x)^3)
 }
 plot(seq(0,1,by=0.01),fx(seq(0,1,by=0.01)),type='l', col ='red',
 ylab='f(x)',xlab='x')
-abline(h=1, col='blue')
+abline(h=2.1, col='blue') # h \aprrox c
 
+# G DISTR. DE REFERENCIA (uniforme en [0,1])
 gx <- function(x){
   return(1)
 }
 
-# Cálculo de la constante c
+# Cálculo de la constante c COMO MAXIMO DE LA FUNCION f/g
 optimize(f=function(x){fx(x)/gx(x)},interval=c(0,1),maximum = TRUE)
 
 fx(0.25)
 
-# Implementacion
-
+# Implementacion;no siempre se generaran v.a. VALIDAS!!!
 dc <- function(){
   Y <- runif(1) # de la densidad g, podría ser exp, etc la que sea util
   U <- runif(1)
