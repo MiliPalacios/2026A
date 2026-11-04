@@ -37,3 +37,130 @@ dc <- function(){
 res <-replicate(1000,dc())
 sum(is.na(res)) # Valores fallidos al generar la va
 sum(!is.na(res)) # Valores validos de la distribución
+
+##################################
+# Metodo de aceptacion y rechazo #
+##################################
+fx <- function(x){
+  return((2/sqrt(pi))*x^(1/2)*exp(-x))
+}
+
+x <- seq(0,10, by = 0.1)
+plot(x, fx(x), type = "l")
+
+# Funcion envolvente
+g1 <- function(x){
+  return(exp(-x))
+}
+
+plot(x, fx(x), type = "l", ylim = c(0,7))
+par(new = TRUE)
+# Constante
+c1 <- optimize(f = function(x){fx(x)/g1(x)}, interval = c(0,30), maximum = TRUE)$objective  # tengo que generar c1 variables para aceptar una
+plot(x, c1*g1(x), type = "l", col = "red", ylim = c(0,7))
+
+gamma_sim <- function(x){
+  # Generamos Y
+  Y <- -log(runif(1))
+  # Verificacion
+  if(runif(1) <= (fx(Y)/(c1*g1(Y)))){
+    return(Y)
+  } else {
+    return(NA)
+  }
+}
+
+res <- sapply(1:10000, function(k){gamma_sim()})
+length(res[is.na(res)])
+length(res[!is.na(res)])
+
+# Funcion envolvente 02
+g2 <- function(x){
+  return(0.5*exp(-0.5*x))
+}
+
+plot(x, fx(x), type = "l", ylim = c(0,0.5))
+par(new = TRUE)
+# Constante
+plot(x, c1*g1(x), type = "l", col = "blue", ylim = c(0,0.5))
+par(new = TRUE)
+# Constante
+c2 <- optimize(f = function(x){fx(x)/g2(x)}, interval = c(0,30), maximum = TRUE)$objective  # tengo que generar c1 variables para aceptar una
+plot(x, c2*g2(x), type = "l", col = "red", ylim = c(0,0.5))
+
+gamma_sim02 <- function(x){
+  # Generamos Y
+  Y <- -2*log(runif(1))
+  # Verificacion
+  if(runif(1) <= (fx(Y)/(c1*g1(Y)))){
+    return(Y)
+  } else {
+    return(NA)
+  }
+}
+
+res <- sapply(1:10000, function(k){gamma_sim02()})
+length(res[is.na(res)])
+length(res[!is.na(res)])
+length(res)/length(res[is.na(res)]) # total/aceptadas
+c2 # valor anterior es aproximacion de c2
+
+# Envolvente exponencial generica
+g3 <- function(x, lambda){
+  return(lambda*exp(-lambda*x))
+}
+# Búsqueda del valor de lambda
+res <- sapply(seq(0.01, 0.99, by = 0.01), function(k){
+  optimize(f = function(x){fx(x)/g3(x, k)}, interval = c(0,30), maximum = TRUE)$objective
+})
+library(data.table)
+TT <- data.table(lambda = seq(0.01, 0.99, by = 0.01), constante = res )
+TT[which.min(TT$constante),]
+plot(TT$lambda, TT$constante, type = "l", col = "blue")
+
+# Generacion de variables aleatoria normales
+normal_sim <- function(){
+  Y1 <- -log(runif(1))
+  Y2 <- -log(runif(1))
+  if(Y2 - (Y1-1)^2/2 > 0){
+    U <- runif(1)
+    if(U <= 0.5){
+      return(Y1)
+    } else {
+      return(-Y1)
+    }
+  } else {
+    return(NA)
+  }
+}
+res <- sapply(1:10000, function(k){        # se puede volver vector a una lista con el comando unlist(lista)
+  normal_sim()
+})
+length(res[is.na(res)])
+length(res[!is.na(res)])
+length(res)/ length(res[!is.na(res)]) # Aproximacion de la constante de la distribucion geometrica de la aceptacion
+mean(res[!is.na(res)])
+sd(res[!is.na(res)])
+
+# Para las otras normales hacer: mu + sigma*Z con Z normal(0,1) generada      
+
+################
+# Metodo Polar #
+################
+normal_polar <- function(){
+V1 <- 2*runif(1) - 1
+V2 <- 2*runif(1) - 1
+S <- V1^2 + V2^2
+  if(S <= 1){
+    X <- sqrt((-2*log(S))/S)*V1
+    Y <- sqrt((-2*log(S))/S)*V2
+    return(c(X,Y))
+  } else {
+    return(c(NA, NA))
+  }
+}
+
+res <- sapply(1:1000, function(k){
+  normal_polar()
+})
+length(res)
