@@ -23,7 +23,9 @@ aprox_fx <- function(k){
 res <- aprox_fx(100000)
 cat("\na) Aproximacion de la integral:", mean(res)) # Estimador
 cat("\nb) Desviación del estimador:", sd(res)/sqrt(length(res))) # Desviacion del estimador
-cat("\nc)Intervalo de confianza al 95%: [ ", quantile(res, 0.025), " , ", quantile(res, 0.975)," ]")
+prom <- mean(res)
+des <- sd(res)/sqrt(length(res))
+cat("\nc)Intervalo de confianza al 95%: [ ", prom - 1.96 * des, " , ", prom + 1.96 * des," ]")
 
 ###############
 # Ejercicio 2 #
@@ -56,7 +58,7 @@ res <- sapply(1:m, function(k){
   simulacion()
 })
 cat("b)\nS = ", mean(res)) # valor esperado de S
-cat("\nVar = ", sd(res)) # Varianza de S
+cat("\nVar = ", sd(res)/sqrt(length(res))) # Varianza de S
 cat("\nPrecio Poliza = ", ((mean(res) + 50)/(1 - 0.08))*(1 + 0.15))
 
 ###############
