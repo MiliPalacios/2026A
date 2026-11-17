@@ -6,7 +6,7 @@ pph <- function(T, lambda){
   while(t < T){
     I <- I + 1
     S[I] <- t
-     t <- t + (-1/lambda)*log(runif(1))
+     t <- t + (-1/lambda)*log(runif(1)) # t se genera como tiempo exponencial
   }
   return(S)
 }
@@ -18,7 +18,7 @@ mean(sapply(1:1000, function(k){
   length(pph(10,lambda = 3))
 }))
 
-# Segunda alternativa
+# Segunda alternativa: generrar uniformes y ordenar
 pph2 <- function(T, lambda){
   N <- rpois(1, lambda = T*lambda)
   t <- sort(N*runif(N))
@@ -33,25 +33,25 @@ plot(res, 0:(length(res)-1), type="s", main = "Proceso de Poisson - proceso 2", 
 flambda <- function(s){
   return(10 + s)
 }
+
 x <- seq(0,1,by = 0.01)
 plot(x, flambda(x), type = "l", col = "red", ylim=c(0,11))
 abline(v=0.5)
 abline(h=0.5)
 
+# Valido solo entre 0 y 1
 ppnh <- function(T, n){ # n es el numero de particiones para el tiempo
-  #T <- 10
-  #n <- 3
+  ti <- seq(0, T, length.out = (n+1))[-1] # Genera la particion y elimino el primer elemento que es 0.
+  lambda_i <- flambda(ti)
   t <- I <- 0
   J <- 1
   S <- c()
-  ti <- seq(0, T, length.out = (n+1))[-1] # Genera la particion y elimino el primer elemento que es 0.
-  lambda_i <- flambda(ti)
   X <- (-1/lambda_i[J])*log(runif(1))
-  while(J!= (n+1)){
-    if((t + X > ti[J]) && (J == (n+1))){
+  while(J <= n){
+    if((t + X > ti[J]) && (J == n)){
       break
     } else if((t + X > ti[J]) && (J < (n+1))){
-      X <- (X - ti[J] + t)*lambda_i[J]*lambda_i[J+1]
+      X <- (X - ti[J] + t)*lambda_i[J]/lambda_i[J+1] # En el libro esta mal
       t <- ti[J]
       J <- J + 1
     } else if(t + X <= ti[J]){
@@ -59,17 +59,17 @@ ppnh <- function(T, n){ # n es el numero de particiones para el tiempo
        if (runif(1) <= flambda(t)/lambda_i[J]){
           I <- I + 1
           S[I] <- t
-          X <- (-1/lambda_i[J])*log(runif(1))
         }
-      } 
+      X <- (-1/lambda_i[J])*log(runif(1))
+    } 
     }
-  return(list(S= S, ti = ti))
+  return(S)
 }
 
-res <- ppnh(10,3)
-resS <- res$S
-resti <- res$ti
-plot(resS,0:(length(resS)-1), type="s", main = "Proceso de Poisson No Homogeneo", ylab = "Num Eventos", xlab = "Tiempo", col = "red", xlim=c(0,10))
-for(i in(1:length(resti))){
-  abline(v = resti[i])
-}
+res <- ppnh(T = 1,n = 5)
+plot(res,1:(length(res)), type="s", main = "Proceso de Poisson No Homogeneo", ylab = "Num Eventos", xlab = "Tiempo", col = "red")
+
+# Comprobación
+mean(sapply(1:1000, function(k){mean(ppnh(T = 1,n = 8) < 0.5)})) # Ver que lado izquierdo y lado derecho no son los mismos
+# Estudio: metodo de aceptacion y rechazo con cambio de geometria (adaptar el espacio acorde la figura para hacer aceptacion y rechazo en nuevo espacio)
+
