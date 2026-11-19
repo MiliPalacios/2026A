@@ -75,3 +75,62 @@ Sistema <- res$Sistema
 eventos <- res$Eventos_tiempo
 plot(eventos, Sistema, type="s", col="red", ylab= "Clientes", xlab="Tiempo", main ="Clientes dentro del sistema")
 abline(v=50, col='blue') # A partir de este umbral no entran al sistema 
+
+# Sistema de Linea de Espera con dos servidores en serie
+# Funcion de tiempos de llegada: depende del sector puede ser normal, exp o exp al otro lado
+Tllegada <- function(){
+  return(rexp(1, rate = 1/5))
+}
+
+# Funcion de tiempos de salida
+Tservicio <- function(){
+  return(rexp(1, rate = 1/3))
+}
+
+sle2s <- function(TT){
+  t <- NNA <- NND <- 0
+  A1 <- A2 <- D <- c()
+  ES <- c(0,0)
+  TA <- Tllegada()
+  T1 <- T2 <- Inf
+  while(t < TT || min(ES)>0){
+    if(TA == min(TA, T1, T2)){ # Hay un arribo pero los nodos estan ocupados
+      t <- TA
+      NNA <- NNA + 1
+      ES[1] <- ES[1] + 1
+      TA <- t + Tllegada()
+      if(ES[1] == 1){
+        T1 <- t + Tservicio()
+      }
+      A1[NNA] <- t
+    }
+    if(T1 == min(TA, T1, T2)){ # Se desocupa el servidor 1 antes del arribo
+      t <- T1
+      ES[1] <- ES[1] - 1
+      ES[2] <- ES[2] + 1
+      if(ES[1] == 0){
+        T1 <- Inf
+      } else {
+        T1 <- t  + Tservicio()
+      }
+      if(ES[2] == 1){
+        T2 <- t  + Tservicio()
+      }
+      A2[NNA - ES[1]] <- t 
+    }
+    if(T2 == min(TA, T1, T2)){ # Se desocupa el servidor 2 antes del arribo
+      t <- T2
+      NND <- NND + 1
+      ES[2] <- ES[2] - 1
+      if(ES[2] == 0){
+        T2 <- Inf
+      } else {
+        T2 <- t + Tservicio()
+      }
+      D[NND] <- t
+    }
+  }
+  return(list(ArriboS1 = A1, ArriboS2 = A2, Salidas = D))
+}
+
+sle2s(TT = 50)
