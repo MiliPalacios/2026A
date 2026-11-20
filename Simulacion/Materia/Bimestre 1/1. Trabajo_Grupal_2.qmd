@@ -7,7 +7,7 @@ editor: visual
 
 # Trabajo Grupal 2
 
-##     Ejercicio 1
+## Ejercicio 1
 
 Dé un método para generar una variable aleatoria con función de densidad
 
@@ -50,10 +50,19 @@ $$F(x) = \sum_{i=1}^{n} p_i F_i(x)$$
 
 ## Ejercicio 10
 
-Escriba un algoritmo que se pueda utilizar para generar variables aleatorias exponenciales en conjuntos de $3$. Compare los requisitos computacionales de este método con el presentado después del ejemplo 5c, que las genera en pares
+Escriba un algoritmo que se pueda utilizar para generar variables aleatorias exponenciales en conjuntos de $3$. Compare los requisitos computacionales de este método con el presentado después del ejemplo 5c, que las genera en pares.
 
+PASO 1: Generar números aleatorios $U_1, U_2, U_3$
 
-## Ejercicio 13
+PASO 2: Hacer $t = -\ln(U_1U_2U_3)$
+
+PASO 3: Generar números aleatorios $U_4, U_5$
+
+PASO 4: $U_{(1)} = \min(U_4, U_5)$ y $U_{(2)} = \max(U_4, U_5)$
+
+PASO 5: $X_1 = t \cdot U_{(1)}, X_2 = t \cdot (U_{(2)} - U_{(1)}), X_3 = t \cdot (1 - U_{(2)})$
+
+## Ejecicio 13
 
 Sea $G$ una función de distribución con densidad $g$ y suponga, para $a$ y $b$ constantes tales que $a < b$, que queremos generar una variable aleatoria a partir de la función de distribución
 
@@ -69,10 +78,13 @@ $$F(x) = \frac{G(x) - G(a)}{G(b) - G(a)}, \quad a \leq x \leq b$$
 
 ## Ejercicio 16
 
-En el ejemplo 5f simulamos una variable aleatoria normal mediante la técnica de rechazo con una distribución exponencial de razón $1$. Muestre que entre todas las funciones de densidad exponencial $g(x) = \lambda e^{-\lambda x}$, el número de iteraciones necesarias se minimiza cuando $\lambda = 1$
+En el ejemplo 5f simulamos una variable aleatoria normal mediante la técnica de rechazo con una distribución exponencial de razón $1$. Muestre que entre todas las funciones de densidad exponencial $g(x) = \lambda e^{-\lambda x}$, el número de iteraciones necesarias se minimiza cuando $\lambda = 1$.
 
+Utilizando $g(x)$, el número esperado de iteraciones en el método de rechazo es igual a la constante $c(\lambda)$ definida por:
 
+$$c(\lambda) = \max_{x > 0} \frac{f(x)}{g(x)} = \max_{x > 0} \left( \frac{2}{\lambda\sqrt{2\pi}} \exp\left( -\frac{x^2}{2} + \lambda x \right) \right)$$
 
+Dicho valor ocurre en el valor de $x$ que maximiza $-\frac{x^2}{2} + \lambda x$, es decir en $x=\lambda$. Por tanto, el número de iteraciones es $c(\lambda) = \lambda$, función que se minimiza cuando toma el menor valor posible, es decir cuando $\lambda = 1$.
 
 ## Ejercicio 19
 
@@ -87,5 +99,37 @@ Sea $(X, Y)$ uniformemente distribuida en un círculo de radio $1$. Muestre que 
 Los autobuses llegan a un encuentro deportivo de acuerdo con un proceso Poisson a razón de cinco por hora. Con la misma probabilidad, cada autobús puede transportar $20, 21, \dots, 40$ aficionados y el número de autobuses distintos es independiente. Escriba un algoritmo para simular la llegada de aficionados al encuentro en el instante $t = 1$
 
 ```{r}
+# N
+Tllegada <- function(){
+  return(rpois(1,lambda = 5))
+}
+# Yi
+Yi <- function(N){
+  if(N==0){
+    return(0)
+  } else {
+    return(sample(20:40, size = N, replace = TRUE, prob = rep(1/length(20:40), length(20:40))))
+  }
+}
 
+# Proceso de Poisson Compuesto
+simu <- function(TT){
+  N_hist <- c() # Historial de buses que llegan en cada instante
+  Af_hist <- c() # Historial con el numero total de aficionados en cada instante de tiempo
+  t <- 1 # Contador sobre las horas simuladas
+  while(t <= TT){
+    # Numero de buses que llegan
+    N <- Tllegada()
+    N_hist <- c(N_hist, N)
+  
+    # Distribución de cada autobus
+    aficionados <- Yi(N)
+    Af_hist <- c(Af_hist, aficionados)
+    
+    # Hora simulada
+    t <- t + 1
+  }
+  return(list(Buses_por_hora = N_hist, Aficionados_por_bus = Af_hist))
+}
+simu(TT = 1)
 ```
