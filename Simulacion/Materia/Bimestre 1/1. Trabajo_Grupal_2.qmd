@@ -1,0 +1,91 @@
+---
+title: "Trabajo Grupal 2"
+author: "Cardenas Mateo, Palacios Milena"
+format: html
+editor: visual
+---
+
+# Trabajo Grupal 2
+
+##     Ejercicio 1
+
+Dé un método para generar una variable aleatoria con función de densidad
+
+$$f(x) = \frac{e^x}{e - 1}, \quad 0 \leq x \leq 1$$
+
+```{r}
+
+```
+
+## Ejercicio 4
+
+Dé un método para generar una variable aleatoria con función de distribución
+
+$$F(x) = 1 - \exp(-\alpha x^\beta), \quad 0 < x < \infty$$
+
+Una variable aleatoria con tal distribución es una variable aleatoria Weibull.
+
+El método escogido es el metodo de la transformada inversa.
+
+$$
+U = F(x) = 1-\exp(-\alpha x^\beta) \equiv X  = \left(-\frac{1}{\alpha}\ln(1-U)\right)^{1/\beta} = \left(-\frac{\ln(U)}{\alpha}\right)^{1/\beta}
+$$
+
+```{r}
+generar_weibull <- function(alpha, beta){
+  return((-log(runif(1))/alpha)^(1/beta))
+}
+generar_weibull(3,4)
+```
+
+## Ejercicio 7
+
+(El método de composición) Suponga que es relativamente fácil generar variables aleatorias a partir de las distribuciones $F_i$, $i = 1, \dots, n$. ¿Cómo podríamos generar una variable aleatoria con la función de distribución
+
+$$F(x) = \sum_{i=1}^{n} p_i F_i(x)$$
+
+```{r}
+
+```
+
+## Ejercicio 10
+
+Escriba un algoritmo que se pueda utilizar para generar variables aleatorias exponenciales en conjuntos de $3$. Compare los requisitos computacionales de este método con el presentado después del ejemplo 5c, que las genera en pares
+
+
+## Ejercicio 13
+
+Sea $G$ una función de distribución con densidad $g$ y suponga, para $a$ y $b$ constantes tales que $a < b$, que queremos generar una variable aleatoria a partir de la función de distribución
+
+$$F(x) = \frac{G(x) - G(a)}{G(b) - G(a)}, \quad a \leq x \leq b$$
+
+(a) Si $X$ tiene distribución $G$, entonces $F$ es la distribución condicional de $X$ dada ¿cuál información?
+
+(b) Muestre que el método de rechazo se reduce en este caso a generar una variable aleatoria $X$ con distribución $G$ y luego aceptarla si está entre $a$ y $b$
+
+```{r}
+
+```
+
+## Ejercicio 16
+
+En el ejemplo 5f simulamos una variable aleatoria normal mediante la técnica de rechazo con una distribución exponencial de razón $1$. Muestre que entre todas las funciones de densidad exponencial $g(x) = \lambda e^{-\lambda x}$, el número de iteraciones necesarias se minimiza cuando $\lambda = 1$
+
+
+
+
+## Ejercicio 19
+
+Sea $(X, Y)$ uniformemente distribuida en un círculo de radio $1$. Muestre que si $R$ es la distancia del centro del círculo a $(X, Y)$, entonces $R^2$ es uniforme en $(0, 1)$
+
+```{r}
+
+```
+
+## Ejercicio 22
+
+Los autobuses llegan a un encuentro deportivo de acuerdo con un proceso Poisson a razón de cinco por hora. Con la misma probabilidad, cada autobús puede transportar $20, 21, \dots, 40$ aficionados y el número de autobuses distintos es independiente. Escriba un algoritmo para simular la llegada de aficionados al encuentro en el instante $t = 1$
+
+```{r}
+
+```
