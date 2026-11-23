@@ -13,8 +13,23 @@ Dé un método para generar una variable aleatoria con función de densidad
 
 $$f(x) = \frac{e^x}{e - 1}, \quad 0 \leq x \leq 1$$
 
-```{r}
+Proponemos el metodo de la transformada inversa, para empezar encontramos la FDA:
 
+$$
+\int_0^{t} \frac{e^x}{e - 1} dx = \frac{e^t-1}{e - 1}
+$$
+
+Despejando de la expresión a t para hallar su inversa tenemos:
+
+$$
+x = ln(U(e-1)+1)
+$$
+
+```{r}
+var_exp <- function(){
+    return(log(runif(1)*(exp(1)-1)+1))
+}
+print(var_exp())
 ```
 
 ## Ejercicio 4
@@ -42,11 +57,15 @@ generar_weibull(3,4)
 
 (El método de composición) Suponga que es relativamente fácil generar variables aleatorias a partir de las distribuciones $F_i$, $i = 1, \dots, n$. ¿Cómo podríamos generar una variable aleatoria con la función de distribución
 
-$$F(x) = \sum_{i=1}^{n} p_i F_i(x)$$
+$$F(x) = \sum_{i=1}^{n} p_i F_i(x)$$Para generar una variable aleatoria con función de distribución $F(x) = \sum_{i=1}^{n} p_i F_i(x)$ (donde $p_i \ge 0$ y $\sum_{i=1}^{n} p_i = 1$), podemos usar el método de composición. En lugar de ponderar o combinar variables aleatorias directamente, interpretamos cada $p_i$ como la probabilidad de seleccionar la distribución componente $F_i$:
 
-```{r}
+1.  Generamos un número aleatorio $U \sim \text{Uniforme}(0,1)$.
 
-```
+2.  Seleccionamos el índice $i \in \{1, \dots, n\}$ según el intervalo acumulado en el que caiga $U$ (es decir, mediante transformada inversa discreta sobre las probabilidades $p_1, \dots, p_n$).
+
+3.  Generamos y devolvemos una observación a partir de la distribución $F_i$ elegida.
+
+Por la ley de probabilidad total, la variable aleatoria resultante tiene exactamente la función de distribución acumulada $F(x) = \sum_{i=1}^{n} p_i F_i(x)$
 
 ## Ejercicio 10
 
@@ -72,9 +91,13 @@ $$F(x) = \frac{G(x) - G(a)}{G(b) - G(a)}, \quad a \leq x \leq b$$
 
 (b) Muestre que el método de rechazo se reduce en este caso a generar una variable aleatoria $X$ con distribución $G$ y luego aceptarla si está entre $a$ y $b$
 
-```{r}
+a\) Si X tiene distribucion G, entonces \$$$F(x)=P({X \leq x}|a\leq X \leq b) = \frac{P({X \leq x},a\leq X \leq b)}{P(a\leq X \leq b)} =\frac{P(a\leq X \leq x)}{P(a\leq X \leq b)}= \frac{G(x)-G(a)}{G(b)-G(a)} $$
 
-```
+b\) Si queremos generar una variable con densidad $f(x) =\frac{g(x)}{G(b)-G(a)}$ proponemos como densidad propuesta g(x), así la constante c para que se de $\frac{f(x)}{cg(x)}\leq1$ será $c=\frac{1}{G(b)-G(a)}$, asi sí $x\not \in [a.b]$ el valor es rechazado, caso contrario al hacer el calculo $\frac{f(x)}{cg(x)}= 1$ para $x\in[a,b]$ esa será la probabilidad de aceptación para numeros entre a y b.
+
+Juntando lo previo se traduce a que podemos generar la variable F(x) generando primero G(x) y si ese numero está entre a y b lo conservamos. Este método es útil para truncamientos de variables aleatorias en donde sea complejo despejar la CDF.
+
+Como ejemplo si queremos generar valores de una normal de parametros 0,1 solo en el intervalo \[1,2\] este método nos dice que generemos la variable normal que ya conocemos como y solo aceptemos si cayó en el intervalo \[1,2\]
 
 ## Ejercicio 16
 
@@ -90,9 +113,9 @@ Dicho valor ocurre en el valor de $x$ que maximiza $-\frac{x^2}{2} + \lambda x$,
 
 Sea $(X, Y)$ uniformemente distribuida en un círculo de radio $1$. Muestre que si $R$ es la distancia del centro del círculo a $(X, Y)$, entonces $R^2$ es uniforme en $(0, 1)$
 
-```{r}
+Notemos que tenemos vamos a hallar la distribución de $R^2$ entonces planteamos $P(R^2\leq u) = P(X^2+Y^2 \leq u)$ así notamos que este será un círculo centrado en 0 de radio $\sqrt u$ , considerando ahora la definición entonces la probabilidad del evento es la medida del evento sobre la medida del espacio entonces tenemos $P(R^2\leq u)=\frac{\text{Área}(\{(x,y):x^2+y^2 \leq u)\})}{\text{Área}(\{(x,y):x^2+y^2 \leq 1)\})}= \frac{\pi (\sqrt u)^2}{\pi \cdot 1}=u$, ahora por definición de variable uniforme entre 0 y 1 tenemos que $P(U\leq u) = \frac{u}{1-0}=u$ por ende $R^2$ se encuentra uniformemente distribuido entre 0 y 1.
 
-```
+$$F_{R^2}(u) = P(R^2 \le u) = \begin{cases} 0, & u < 0, \\ u, & 0 \le u \le 1, \\ 1, & u > 1. \end{cases}$$
 
 ## Ejercicio 22
 
